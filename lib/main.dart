@@ -1,7 +1,19 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firestore_coupon/firebase_options.dart';
+import 'package:firestore_coupon/repository/test_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-void main() {
+final testRepositoryProvider =
+    Provider<TestRepository>((ref) => TestRepository());
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await attemptLogin();
   runApp(
     const ProviderScope(
       child: MyApp(),
@@ -33,9 +45,38 @@ class MyHomePage extends HookConsumerWidget {
       appBar: AppBar(
         title: const Text('coupon test'),
       ),
-      body: const Center(
-        child: Text('test'),
+      body: Column(
+        children: [
+          const Text('test'),
+          FutureBuilder<String?>(
+            builder: (ctx, snapshot) {
+              return Text(snapshot.data ?? '');
+            },
+            future: ref.read(testRepositoryProvider).fetchTestString(),
+          ),
+        ],
       ),
     );
+  }
+}
+
+Future<void> attemptLogin() async {
+  final currentUser = FirebaseAuth.instance.currentUser;
+  if (currentUser != null) {
+    debugPrint(' === already logged in. id: ${currentUser.uid}');
+    return;
+  }
+
+  try {
+    final userCredential = await FirebaseAuth.instance.signInAnonymously();
+    debugPrint(' === logged in.');
+  } on FirebaseAuthException catch (e) {
+    switch (e.code) {
+      case "operation-not-allowed":
+        debugPrint('anonymous auth hasn\'t been enabled for this project.');
+        break;
+      default:
+        debugPrint('unknown error. e: $e');
+    }
   }
 }
