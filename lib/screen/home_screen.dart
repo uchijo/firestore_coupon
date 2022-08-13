@@ -7,18 +7,19 @@ class HomeScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(homeScreenStateProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('coupon test'),
       ),
-      body: Container(
-        child: FutureBuilder<String?>(
-          future: ref.read(authRepositoryProvider).fetchUserId(),
-          initialData: "fetching data",
-          builder: (ctx, snapshot) {
-            return Text(snapshot.data ?? 'null');
-          },
-        ),
+      body: Column(
+        children: [
+          ...?state.shopDataList
+              ?.map((element) => ListTile(
+                    title: Text(element.shopName),
+                  ))
+              .toList(),
+        ],
       ),
     );
   }

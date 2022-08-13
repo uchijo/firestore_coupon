@@ -5,10 +5,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firestore_coupon/firebase_options.dart';
 import 'package:firestore_coupon/repository/android_auth_repository.dart';
 import 'package:firestore_coupon/repository/interface/auth_repository.dart';
+import 'package:firestore_coupon/repository/shop_repository.dart';
 import 'package:firestore_coupon/repository/test_repository.dart';
 import 'package:firestore_coupon/screen/home_screen.dart';
+import 'package:firestore_coupon/view_model/home_screen_state.dart';
+import 'package:firestore_coupon/view_model/home_screen_state_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+// =============== リポジトリ ===============
 
 // 色々試す用の汚して良いリポジトリ
 final testRepositoryProvider =
@@ -16,6 +21,16 @@ final testRepositoryProvider =
 
 // 端末idなどの取得に用いる
 late final Provider<AuthRepository> authRepositoryProvider;
+
+// 店データを取得
+final shopRepositoryProvider =
+    Provider<ShopRepository>((ref) => ShopRepository());
+
+// =============== 画面ごとのViewModel ===============
+
+final homeScreenStateProvider =
+    StateNotifierProvider<HomeScreenStateNotifier, HomeScreenState>(
+        (ref) => HomeScreenStateNotifier(ref));
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
