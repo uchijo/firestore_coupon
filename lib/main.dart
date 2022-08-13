@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firestore_coupon/firebase_options.dart';
 import 'package:firestore_coupon/repository/test_repository.dart';
+import 'package:firestore_coupon/screen/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -31,31 +32,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends HookConsumerWidget {
-  const MyHomePage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('coupon test'),
-      ),
-      body: Column(
-        children: [
-          const Text('test'),
-          FutureBuilder<String?>(
-            builder: (ctx, snapshot) {
-              return Text(snapshot.data ?? '');
-            },
-            future: ref.read(testRepositoryProvider).fetchTestString(),
-          ),
-        ],
-      ),
+      home: const HomeScreen(),
     );
   }
 }
