@@ -17,6 +17,9 @@ dependencies:
   firebase_core:
   firebase_auth:
   cloud_firestore:
+  uuid:
+  go_router:
+  device_info_plus:
 
 
   cupertino_icons: ^1.0.2
