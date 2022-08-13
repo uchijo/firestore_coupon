@@ -8,8 +8,10 @@ import 'package:firestore_coupon/repository/interface/auth_repository.dart';
 import 'package:firestore_coupon/repository/shop_repository.dart';
 import 'package:firestore_coupon/repository/test_repository.dart';
 import 'package:firestore_coupon/screen/home_screen.dart';
-import 'package:firestore_coupon/view_model/home_screen_state.dart';
-import 'package:firestore_coupon/view_model/home_screen_state_notifier.dart';
+import 'package:firestore_coupon/screen/shop_info_screen.dart';
+import 'package:firestore_coupon/screen/single_stock_coupon_screen.dart';
+import 'package:firestore_coupon/view_model/home_screen/home_screen_state.dart';
+import 'package:firestore_coupon/view_model/home_screen/home_screen_state_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -61,7 +63,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const HomeScreen(),
+      initialRoute: '/',
+      routes: <String, WidgetBuilder>{
+        '/': (BuildContext context) => const HomeScreen(),
+        '/shopInfo': (BuildContext context) => const ShopInfoScreen(),
+        '/coupon': (BuildContext context) => const SingleStockCouponScreen(),
+      },
     );
   }
 }

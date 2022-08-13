@@ -15,9 +15,23 @@ class HomeScreen extends HookConsumerWidget {
       body: Column(
         children: [
           ...?state.shopDataList
-              ?.map((element) => ListTile(
+              ?.map(
+                (element) => Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 4,
+                    horizontal: 8,
+                  ),
+                  child: ListTile(
                     title: Text(element.shopName),
-                  ))
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4),
+                      side: const BorderSide(color: Colors.black, width: 1),
+                    ),
+                    onTap: () => Navigator.of(context)
+                        .pushNamed('/shopInfo', arguments: element),
+                  ),
+                ),
+              )
               .toList(),
         ],
       ),
