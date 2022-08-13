@@ -1,13 +1,21 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firestore_coupon/firebase_options.dart';
+import 'package:firestore_coupon/repository/android_auth_repository.dart';
+import 'package:firestore_coupon/repository/interface/auth_repository.dart';
 import 'package:firestore_coupon/repository/test_repository.dart';
 import 'package:firestore_coupon/screen/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+// 色々試す用の汚して良いリポジトリ
 final testRepositoryProvider =
     Provider<TestRepository>((ref) => TestRepository());
+
+// 端末idなどの取得に用いる
+late final Provider<AuthRepository> authRepositoryProvider;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,6 +23,12 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await attemptLogin();
+
+  if (Platform.isAndroid) {
+    authRepositoryProvider =
+        Provider<AuthRepository>((ref) => AndroidAuthRepository());
+  }
+
   runApp(
     const ProviderScope(
       child: MyApp(),
