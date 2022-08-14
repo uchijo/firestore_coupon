@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firestore_coupon/firebase_options.dart';
 import 'package:firestore_coupon/repository/android_auth_repository.dart';
+import 'package:firestore_coupon/repository/coupon_repository.dart';
 import 'package:firestore_coupon/repository/interface/auth_repository.dart';
 import 'package:firestore_coupon/repository/shop_repository.dart';
 import 'package:firestore_coupon/repository/test_repository.dart';
@@ -12,6 +13,8 @@ import 'package:firestore_coupon/screen/shop_info_screen.dart';
 import 'package:firestore_coupon/screen/single_stock_coupon_screen.dart';
 import 'package:firestore_coupon/view_model/home_screen/home_screen_state.dart';
 import 'package:firestore_coupon/view_model/home_screen/home_screen_state_notifier.dart';
+import 'package:firestore_coupon/view_model/single_stock_coupon_screen/single_stock_coupon_screen_state.dart';
+import 'package:firestore_coupon/view_model/single_stock_coupon_screen/single_stock_coupon_screen_state_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -28,11 +31,20 @@ late final Provider<AuthRepository> authRepositoryProvider;
 final shopRepositoryProvider =
     Provider<ShopRepository>((ref) => ShopRepository());
 
+// 1個ストックできるクーポン追加したり確認したり
+final singleStockCouponRepositoryProvider =
+    Provider<SingleStockCouponRepository>(
+        (ref) => SingleStockCouponRepository());
+
 // =============== 画面ごとのViewModel ===============
 
 final homeScreenStateProvider =
     StateNotifierProvider<HomeScreenStateNotifier, HomeScreenState>(
         (ref) => HomeScreenStateNotifier(ref));
+
+final singleStockCouponStateProvider = StateNotifierProvider<
+        SingleStockCouponScreenStateNotifier, SingleStockCouponScreenState>(
+    (ref) => SingleStockCouponScreenStateNotifier(ref));
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,15 +1,20 @@
+import 'package:firestore_coupon/main.dart';
 import 'package:firestore_coupon/model/shop/coupon_type.dart';
 import 'package:firestore_coupon/model/shop/shop_data.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ShopInfoScreen extends StatelessWidget {
+class ShopInfoScreen extends HookConsumerWidget {
   const ShopInfoScreen({Key? key}) : super(key: key);
 
-  Widget _createButton(BuildContext context, ShopData shopData) {
+  Widget _createButton(BuildContext context, ShopData shopData, WidgetRef ref) {
     switch (shopData.couponType) {
       case CouponType.oneStock:
         return ElevatedButton(
           onPressed: () {
+            ref
+                .read(singleStockCouponStateProvider.notifier)
+                .loadState(shopData: shopData);
             Navigator.of(context).pushNamed('/coupon', arguments: shopData);
           },
           child: const Text('クーポンへ進む'),
@@ -25,14 +30,14 @@ class ShopInfoScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final shopData = ModalRoute.of(context)?.settings.arguments as ShopData;
     return Scaffold(
       appBar: AppBar(
         title: Text('${shopData.shopName}について'),
       ),
       body: Center(
-        child: _createButton(context, shopData),
+        child: _createButton(context, shopData, ref),
       ),
     );
   }
