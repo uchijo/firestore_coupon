@@ -11,8 +11,25 @@ class SingleStockCouponScreenStateNotifier
 
   final StateNotifierProviderRef ref;
 
-  void loadState({required ShopData shopData}) {
-    state = state.copyWith(shopData: shopData);
+  // 画面遷移前に呼ぶ
+  Future<void> loadState({required ShopData shopData}) async {
+    final storedCouponId = await ref
+        .read(couponRepositoryProvider)
+        .loadStockedCoupon(shopData: shopData);
+
+    // クーポンがローカルに見つからない場合はストックされてないものとする。
+    if (storedCouponId == null) {
+      state = state.copyWith(shopData: shopData, stockedCoupon: null);
+      return;
+    }
+
+    // クーポンがあれば、firestoreから情報を持ってきて表示
+    final stockedCoupon =
+        await ref.read(couponRepositoryProvider).fetchCouponById(
+              shopData: shopData,
+              couponDocId: storedCouponId,
+            );
+    state = state.copyWith(shopData: shopData, stockedCoupon: stockedCoupon);
   }
 
   Future<void> useStockedCoupon() async {
@@ -23,10 +40,17 @@ class SingleStockCouponScreenStateNotifier
       return;
     }
 
+    // firestoreで使用済みとする
     await ref.read(couponRepositoryProvider).markAsUsed(
         shopData: state.shopData!,
         documentId: state.stockedCoupon!.documentId!);
 
+    // ローカルの永続化から削除
+    await ref
+        .read(couponRepositoryProvider)
+        .deleteStoredCoupon(shopData: state.shopData!);
+
+    // 画面表示を更新
     state = state.copyWith(stockedCoupon: null);
   }
 
@@ -52,11 +76,20 @@ class SingleStockCouponScreenStateNotifier
       return;
     }
 
+    // firestoreに追加
     final couponDataWithDocId = await ref
         .read(couponRepositoryProvider)
         .addCoupon(couponData: couponToAdd, shopRef: state.shopData!.refName);
+
+    // stateに保存
     state = state.copyWith(
         stockedCoupon: couponDataWithDocId, couponCandidate: null);
+
+    // ローカルで永続化
+    ref.read(couponRepositoryProvider).storeCouponDocId(
+          shopData: state.shopData!,
+          documentId: couponDataWithDocId.documentId!,
+        );
   }
 
   Future<void> fetchCoupon() async {

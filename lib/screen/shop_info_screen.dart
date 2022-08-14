@@ -11,7 +11,7 @@ class ShopInfoScreen extends HookConsumerWidget {
     switch (shopData.couponType) {
       case CouponType.oneStock:
         return ElevatedButton(
-          onPressed: () {
+          onPressed: () async {
             ref
                 .read(singleStockCouponStateProvider.notifier)
                 .loadState(shopData: shopData);

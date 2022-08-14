@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firestore_coupon/model/coupon/coupon_data.dart';
 import 'package:firestore_coupon/model/shop/shop_data.dart';
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CouponRepository {
   Future<CouponData> addCoupon(
@@ -20,6 +21,23 @@ class CouponRepository {
     final docRef = FirebaseFirestore.instance
         .doc('coupons/${shopData.refName}/coupons/$documentId');
     docRef.update({'isUsed': true});
+  }
+
+  Future<CouponData?> fetchCouponById({
+    required ShopData shopData,
+    required String couponDocId,
+  }) async {
+    final document = await FirebaseFirestore.instance
+        .doc('coupons/${shopData.refName}/coupons/$couponDocId')
+        .get();
+
+    // データが存在しなければnull返して終わり
+    if (!document.exists) {
+      return null;
+    }
+
+    final dataWithoutId = CouponData.fromJson(document.data()!);
+    return dataWithoutId.copyWith(documentId: couponDocId);
   }
 
   Future<List<CouponData>?> fetchUnusedCoupons({
@@ -41,5 +59,22 @@ class CouponRepository {
       final rawCoupon = CouponData.fromJson(doc.data());
       return rawCoupon.copyWith(documentId: doc.id);
     }).toList();
+  }
+
+  Future<void> storeCouponDocId({
+    required ShopData shopData,
+    required String documentId,
+  }) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(shopData.refName, documentId);
+  }
+
+  Future<String?> loadStockedCoupon({required ShopData shopData}) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(shopData.refName);
+  }
+
+  Future<void> deleteStoredCoupon({required ShopData shopData}) async {
+    await SharedPreferences.getInstance();
   }
 }

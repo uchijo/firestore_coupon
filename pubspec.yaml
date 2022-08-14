@@ -21,6 +21,7 @@ dependencies:
   go_router:
   device_info_plus:
   android_id:
+  shared_preferences:
 
 
   cupertino_icons: ^1.0.2
