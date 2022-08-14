@@ -61,6 +61,24 @@ class CouponRepository {
     }).toList();
   }
 
+  Timestamp _timestampToday() {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    return Timestamp.fromDate(today);
+  }
+
+  Future<bool> canDrawToday({
+    required ShopData shopData,
+    required String userId,
+  }) async {
+    final collectionRef = await FirebaseFirestore.instance
+        .collection('coupons/${shopData.refName}/coupons')
+        .where('userId', isEqualTo: userId)
+        .orderBy('createdAt')
+        .startAt([_timestampToday()]).get();
+    return collectionRef.docs.isEmpty;
+  }
+
   Future<void> storeCouponDocId({
     required ShopData shopData,
     required String documentId,
@@ -75,6 +93,7 @@ class CouponRepository {
   }
 
   Future<void> deleteStoredCoupon({required ShopData shopData}) async {
-    await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(shopData.refName);
   }
 }
