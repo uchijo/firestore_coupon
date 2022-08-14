@@ -23,9 +23,9 @@ mixin _$CouponData {
   bool get isUsed => throw _privateConstructorUsedError;
   @JsonKey(fromJson: fromTimestampJson, toJson: toTimestampJson)
   Timestamp get createdAt => throw _privateConstructorUsedError;
-  String get couponId => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
   String get couponName => throw _privateConstructorUsedError;
+  String? get documentId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -42,9 +42,9 @@ abstract class $CouponDataCopyWith<$Res> {
       {bool isUsed,
       @JsonKey(fromJson: fromTimestampJson, toJson: toTimestampJson)
           Timestamp createdAt,
-      String couponId,
       String userId,
-      String couponName});
+      String couponName,
+      String? documentId});
 }
 
 /// @nodoc
@@ -59,9 +59,9 @@ class _$CouponDataCopyWithImpl<$Res> implements $CouponDataCopyWith<$Res> {
   $Res call({
     Object? isUsed = freezed,
     Object? createdAt = freezed,
-    Object? couponId = freezed,
     Object? userId = freezed,
     Object? couponName = freezed,
+    Object? documentId = freezed,
   }) {
     return _then(_value.copyWith(
       isUsed: isUsed == freezed
@@ -72,10 +72,6 @@ class _$CouponDataCopyWithImpl<$Res> implements $CouponDataCopyWith<$Res> {
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as Timestamp,
-      couponId: couponId == freezed
-          ? _value.couponId
-          : couponId // ignore: cast_nullable_to_non_nullable
-              as String,
       userId: userId == freezed
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
@@ -84,6 +80,10 @@ class _$CouponDataCopyWithImpl<$Res> implements $CouponDataCopyWith<$Res> {
           ? _value.couponName
           : couponName // ignore: cast_nullable_to_non_nullable
               as String,
+      documentId: documentId == freezed
+          ? _value.documentId
+          : documentId // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -99,9 +99,9 @@ abstract class _$$_CouponDataCopyWith<$Res>
       {bool isUsed,
       @JsonKey(fromJson: fromTimestampJson, toJson: toTimestampJson)
           Timestamp createdAt,
-      String couponId,
       String userId,
-      String couponName});
+      String couponName,
+      String? documentId});
 }
 
 /// @nodoc
@@ -118,9 +118,9 @@ class __$$_CouponDataCopyWithImpl<$Res> extends _$CouponDataCopyWithImpl<$Res>
   $Res call({
     Object? isUsed = freezed,
     Object? createdAt = freezed,
-    Object? couponId = freezed,
     Object? userId = freezed,
     Object? couponName = freezed,
+    Object? documentId = freezed,
   }) {
     return _then(_$_CouponData(
       isUsed: isUsed == freezed
@@ -131,10 +131,6 @@ class __$$_CouponDataCopyWithImpl<$Res> extends _$CouponDataCopyWithImpl<$Res>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as Timestamp,
-      couponId: couponId == freezed
-          ? _value.couponId
-          : couponId // ignore: cast_nullable_to_non_nullable
-              as String,
       userId: userId == freezed
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
@@ -143,6 +139,10 @@ class __$$_CouponDataCopyWithImpl<$Res> extends _$CouponDataCopyWithImpl<$Res>
           ? _value.couponName
           : couponName // ignore: cast_nullable_to_non_nullable
               as String,
+      documentId: documentId == freezed
+          ? _value.documentId
+          : documentId // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -151,32 +151,32 @@ class __$$_CouponDataCopyWithImpl<$Res> extends _$CouponDataCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_CouponData with DiagnosticableTreeMixin implements _CouponData {
   _$_CouponData(
-      {this.isUsed = true,
+      {required this.isUsed,
       @JsonKey(fromJson: fromTimestampJson, toJson: toTimestampJson)
           required this.createdAt,
-      required this.couponId,
       required this.userId,
-      required this.couponName});
+      required this.couponName,
+      this.documentId = null});
 
   factory _$_CouponData.fromJson(Map<String, dynamic> json) =>
       _$$_CouponDataFromJson(json);
 
   @override
-  @JsonKey()
   final bool isUsed;
   @override
   @JsonKey(fromJson: fromTimestampJson, toJson: toTimestampJson)
   final Timestamp createdAt;
   @override
-  final String couponId;
-  @override
   final String userId;
   @override
   final String couponName;
+  @override
+  @JsonKey()
+  final String? documentId;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CouponData(isUsed: $isUsed, createdAt: $createdAt, couponId: $couponId, userId: $userId, couponName: $couponName)';
+    return 'CouponData(isUsed: $isUsed, createdAt: $createdAt, userId: $userId, couponName: $couponName, documentId: $documentId)';
   }
 
   @override
@@ -186,9 +186,9 @@ class _$_CouponData with DiagnosticableTreeMixin implements _CouponData {
       ..add(DiagnosticsProperty('type', 'CouponData'))
       ..add(DiagnosticsProperty('isUsed', isUsed))
       ..add(DiagnosticsProperty('createdAt', createdAt))
-      ..add(DiagnosticsProperty('couponId', couponId))
       ..add(DiagnosticsProperty('userId', userId))
-      ..add(DiagnosticsProperty('couponName', couponName));
+      ..add(DiagnosticsProperty('couponName', couponName))
+      ..add(DiagnosticsProperty('documentId', documentId));
   }
 
   @override
@@ -198,10 +198,11 @@ class _$_CouponData with DiagnosticableTreeMixin implements _CouponData {
             other is _$_CouponData &&
             const DeepCollectionEquality().equals(other.isUsed, isUsed) &&
             const DeepCollectionEquality().equals(other.createdAt, createdAt) &&
-            const DeepCollectionEquality().equals(other.couponId, couponId) &&
             const DeepCollectionEquality().equals(other.userId, userId) &&
             const DeepCollectionEquality()
-                .equals(other.couponName, couponName));
+                .equals(other.couponName, couponName) &&
+            const DeepCollectionEquality()
+                .equals(other.documentId, documentId));
   }
 
   @JsonKey(ignore: true)
@@ -210,9 +211,9 @@ class _$_CouponData with DiagnosticableTreeMixin implements _CouponData {
       runtimeType,
       const DeepCollectionEquality().hash(isUsed),
       const DeepCollectionEquality().hash(createdAt),
-      const DeepCollectionEquality().hash(couponId),
       const DeepCollectionEquality().hash(userId),
-      const DeepCollectionEquality().hash(couponName));
+      const DeepCollectionEquality().hash(couponName),
+      const DeepCollectionEquality().hash(documentId));
 
   @JsonKey(ignore: true)
   @override
@@ -227,12 +228,12 @@ class _$_CouponData with DiagnosticableTreeMixin implements _CouponData {
 
 abstract class _CouponData implements CouponData {
   factory _CouponData(
-      {final bool isUsed,
+      {required final bool isUsed,
       @JsonKey(fromJson: fromTimestampJson, toJson: toTimestampJson)
           required final Timestamp createdAt,
-      required final String couponId,
       required final String userId,
-      required final String couponName}) = _$_CouponData;
+      required final String couponName,
+      final String? documentId}) = _$_CouponData;
 
   factory _CouponData.fromJson(Map<String, dynamic> json) =
       _$_CouponData.fromJson;
@@ -243,11 +244,11 @@ abstract class _CouponData implements CouponData {
   @JsonKey(fromJson: fromTimestampJson, toJson: toTimestampJson)
   Timestamp get createdAt => throw _privateConstructorUsedError;
   @override
-  String get couponId => throw _privateConstructorUsedError;
-  @override
   String get userId => throw _privateConstructorUsedError;
   @override
   String get couponName => throw _privateConstructorUsedError;
+  @override
+  String? get documentId => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$$_CouponDataCopyWith<_$_CouponData> get copyWith =>

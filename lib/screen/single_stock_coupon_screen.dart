@@ -17,29 +17,24 @@ class SingleStockCouponScreen extends HookConsumerWidget {
       body: Column(
         children: [
           ElevatedButton(
-            onPressed: () {
-              final coupon = notifier.createCoupon();
-              debugPrint('coupon: $coupon');
+            onPressed: () async {
+              final newCoupon = await notifier.createCoupon();
+              if (newCoupon == null) {
+                return;
+              }
+
+              await notifier.addCoupon(newCoupon);
             },
             child: const Text('クーポンを引く'),
           ),
-          Text(
-              'coupon: ${ref.watch(singleStockCouponStateProvider).couponCandidate}'),
           const SizedBox(height: 50),
+          Text('ストックされているクーポン: ${state.stockedCoupon}'),
           ElevatedButton(
             onPressed: () async {
-              await notifier.addCoupon();
+              await notifier.useStockedCoupon();
             },
-            child: const Text('上のやつを追加'),
-          ),
-          const SizedBox(height: 50),
-          ElevatedButton(
-            onPressed: () async {
-              await notifier.fetchCoupon();
-            },
-            child: const Text('クーポンがサーバー上にあるか確認'),
-          ),
-          Text('fetched coupon: ${state.stockedCoupon}'),
+            child: const Text('ストック済みクーポンを使用する'),
+          )
         ],
       ),
     );

@@ -3,27 +3,26 @@ import 'package:firestore_coupon/model/coupon/coupon_data.dart';
 import 'package:firestore_coupon/model/shop/shop_data.dart';
 import 'package:flutter/foundation.dart';
 
-class SingleStockCouponRepository {
-  // TODO: 現状一個目のキーを返してるだけなのでちゃんとランダムにする
-  String getRandomCoupon({required Map<String, int> probability}) {
-    return probability.keys.toList()[0];
-  }
-
-  Future<void> addCoupon(
+class CouponRepository {
+  Future<CouponData> addCoupon(
       {required CouponData couponData, required String shopRef}) async {
     debugPrint(couponData.toJson().toString());
-    await FirebaseFirestore.instance
+    final docRef = await FirebaseFirestore.instance
         .collection('coupons/$shopRef/coupons')
         .add(couponData.toJson());
+    return couponData.copyWith(documentId: docRef.id);
   }
 
-  // Future<bool> canDrawToday(
-  //     {required String userId, required String shopRef}) async {
-  //   final couponCollection =
-  //       FirebaseFirestore.instance.collection('coupons/$shopRef/coupons');
-  // }
+  Future<void> markAsUsed({
+    required ShopData shopData,
+    required String documentId,
+  }) async {
+    final docRef = FirebaseFirestore.instance
+        .doc('coupons/${shopData.refName}/coupons/$documentId');
+    docRef.update({'isUsed': true});
+  }
 
-  Future<CouponData?> fetchUnusedCoupon({
+  Future<List<CouponData>?> fetchUnusedCoupons({
     required ShopData shopData,
     required String userId,
   }) async {
@@ -38,6 +37,9 @@ class SingleStockCouponRepository {
       return null;
     }
 
-    return CouponData.fromJson(result.docs[0].data());
+    return result.docs.map((doc) {
+      final rawCoupon = CouponData.fromJson(doc.data());
+      return rawCoupon.copyWith(documentId: doc.id);
+    }).toList();
   }
 }

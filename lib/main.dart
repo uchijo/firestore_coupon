@@ -32,9 +32,8 @@ final shopRepositoryProvider =
     Provider<ShopRepository>((ref) => ShopRepository());
 
 // 1個ストックできるクーポン追加したり確認したり
-final singleStockCouponRepositoryProvider =
-    Provider<SingleStockCouponRepository>(
-        (ref) => SingleStockCouponRepository());
+final couponRepositoryProvider =
+    Provider<CouponRepository>((ref) => CouponRepository());
 
 // =============== 画面ごとのViewModel ===============
 
