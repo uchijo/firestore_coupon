@@ -1,12 +1,49 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firestore_coupon/firebase_options.dart';
+import 'package:firestore_coupon/repository/android_auth_repository.dart';
+import 'package:firestore_coupon/repository/coupon_repository.dart';
+import 'package:firestore_coupon/repository/interface/auth_repository.dart';
+import 'package:firestore_coupon/repository/shop_repository.dart';
 import 'package:firestore_coupon/repository/test_repository.dart';
+import 'package:firestore_coupon/screen/home_screen.dart';
+import 'package:firestore_coupon/screen/shop_info_screen.dart';
+import 'package:firestore_coupon/screen/single_stock_coupon_screen.dart';
+import 'package:firestore_coupon/view_model/home_screen/home_screen_state.dart';
+import 'package:firestore_coupon/view_model/home_screen/home_screen_state_notifier.dart';
+import 'package:firestore_coupon/view_model/single_stock_coupon_screen/single_stock_coupon_screen_state.dart';
+import 'package:firestore_coupon/view_model/single_stock_coupon_screen/single_stock_coupon_screen_state_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+// =============== リポジトリ ===============
+
+// 色々試す用の汚して良いリポジトリ
 final testRepositoryProvider =
     Provider<TestRepository>((ref) => TestRepository());
+
+// 端末idなどの取得に用いる
+late final Provider<AuthRepository> authRepositoryProvider;
+
+// 店データを取得
+final shopRepositoryProvider =
+    Provider<ShopRepository>((ref) => ShopRepository());
+
+// 1個ストックできるクーポン追加したり確認したり
+final couponRepositoryProvider =
+    Provider<CouponRepository>((ref) => CouponRepository());
+
+// =============== 画面ごとのViewModel ===============
+
+final homeScreenStateProvider =
+    StateNotifierProvider<HomeScreenStateNotifier, HomeScreenState>(
+        (ref) => HomeScreenStateNotifier(ref));
+
+final singleStockCouponStateProvider = StateNotifierProvider<
+        SingleStockCouponScreenStateNotifier, SingleStockCouponScreenState>(
+    (ref) => SingleStockCouponScreenStateNotifier(ref));
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,6 +51,12 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await attemptLogin();
+
+  if (Platform.isAndroid) {
+    authRepositoryProvider =
+        Provider<AuthRepository>((ref) => AndroidAuthRepository());
+  }
+
   runApp(
     const ProviderScope(
       child: MyApp(),
@@ -31,31 +74,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends HookConsumerWidget {
-  const MyHomePage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('coupon test'),
-      ),
-      body: Column(
-        children: [
-          const Text('test'),
-          FutureBuilder<String?>(
-            builder: (ctx, snapshot) {
-              return Text(snapshot.data ?? '');
-            },
-            future: ref.read(testRepositoryProvider).fetchTestString(),
-          ),
-        ],
-      ),
+      initialRoute: '/',
+      routes: <String, WidgetBuilder>{
+        '/': (BuildContext context) => const HomeScreen(),
+        '/shopInfo': (BuildContext context) => const ShopInfoScreen(),
+        '/coupon': (BuildContext context) => const SingleStockCouponScreen(),
+      },
     );
   }
 }

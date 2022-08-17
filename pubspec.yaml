@@ -17,6 +17,11 @@ dependencies:
   firebase_core:
   firebase_auth:
   cloud_firestore:
+  uuid:
+  go_router:
+  device_info_plus:
+  android_id:
+  shared_preferences:
 
 
   cupertino_icons: ^1.0.2
@@ -26,6 +31,7 @@ dev_dependencies:
     sdk: flutter
   freezed:
   build_runner:
+  json_serializable:
 
   flutter_lints: ^2.0.0
 

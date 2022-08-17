@@ -1,0 +1,73 @@
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'coupon_data.freezed.dart';
+part 'coupon_data.g.dart';
+
+// run this to generate code
+// flutter pub run build_runner build
+
+const rawTimestamp = JsonKey();
+
+Timestamp toTimestampJson(Timestamp timestamp) {
+  return timestamp;
+}
+
+Timestamp fromTimestampJson(Timestamp json) {
+  return json;
+}
+
+@freezed
+class CouponData with _$CouponData {
+  factory CouponData({
+    required bool isUsed,
+    @JsonKey(fromJson: fromTimestampJson, toJson: toTimestampJson)
+        required Timestamp createdAt,
+    required String userId,
+    required String couponName,
+    @Default(null) String? documentId,
+  }) = _CouponData;
+
+  factory CouponData.fromJson(Map<String, dynamic> json) =>
+      _$CouponDataFromJson(json);
+
+  factory CouponData.createRandomly(
+      {required Map<String, int> probability, required String userId}) {
+    int sum = 0;
+    final probabilityList = <_KeyAndThreshold>[];
+    for (final key in probability.keys) {
+      sum += probability[key]!;
+      probabilityList.add(_KeyAndThreshold(key: key, threshold: sum));
+    }
+
+    final randomNum = Random().nextInt(probabilityList.last.threshold);
+    String couponName = '';
+
+    for (final value in probabilityList) {
+      if (randomNum < value.threshold) {
+        couponName = value.key;
+        break;
+      }
+    }
+
+    return CouponData(
+      createdAt: Timestamp.now(),
+      userId: userId,
+      couponName: couponName,
+      isUsed: false,
+    );
+  }
+}
+
+class _KeyAndThreshold {
+  final String key;
+  final int threshold;
+  _KeyAndThreshold({required this.key, required this.threshold});
+
+  @override
+  String toString() => 'key: $key, threshold: $threshold';
+}
