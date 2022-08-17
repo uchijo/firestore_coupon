@@ -12,7 +12,7 @@ class ShopInfoScreen extends HookConsumerWidget {
       case CouponType.oneStock:
         return ElevatedButton(
           onPressed: () async {
-            ref
+            await ref
                 .read(singleStockCouponStateProvider.notifier)
                 .loadState(shopData: shopData);
             Navigator.of(context)
@@ -26,7 +26,7 @@ class ShopInfoScreen extends HookConsumerWidget {
       case CouponType.multipleStock:
         return ElevatedButton(
           onPressed: () async {
-            ref
+            await ref
                 .read(multipleStockCouponStateProvider.notifier)
                 .loadState(shopData: shopData);
             Navigator.of(context)

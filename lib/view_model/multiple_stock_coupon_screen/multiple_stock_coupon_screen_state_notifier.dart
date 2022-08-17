@@ -46,4 +46,25 @@ class MultipleStockCouponScreenStateNotifier
         .fetchUnusedCoupons(shopData: state.shopData!, userId: userId);
     state = state.copyWith(stockedCoupons: unusedCoupons);
   }
+
+  Future<void> useCoupon({required CouponData coupon}) async {
+    if (state.shopData == null || coupon.documentId == null) {
+      return;
+    }
+
+    await ref.read(couponRepositoryProvider).markAsUsed(
+          shopData: state.shopData!,
+          documentId: coupon.documentId!,
+        );
+
+    // 表示されるリストを書き換え、同じクーポンを再度使用できないように変更
+    final oldList = state.stockedCoupons!;
+    final newList = oldList.map((e) {
+      if (e.documentId != coupon.documentId) {
+        return e;
+      }
+      return e.copyWith(isUsed: true);
+    }).toList();
+    state = state.copyWith(stockedCoupons: newList);
+  }
 }
