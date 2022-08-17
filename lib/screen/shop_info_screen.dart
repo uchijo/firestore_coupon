@@ -15,7 +15,8 @@ class ShopInfoScreen extends HookConsumerWidget {
             ref
                 .read(singleStockCouponStateProvider.notifier)
                 .loadState(shopData: shopData);
-            Navigator.of(context).pushNamed('/coupon', arguments: shopData);
+            Navigator.of(context)
+                .pushNamed('/singleCoupon', arguments: shopData);
           },
           child: const Text('クーポンへ進む'),
         );
@@ -23,8 +24,16 @@ class ShopInfoScreen extends HookConsumerWidget {
         // TODO: Handle this case.
         break;
       case CouponType.multipleStock:
-        // TODO: Handle this case.
-        break;
+        return ElevatedButton(
+          onPressed: () async {
+            ref
+                .read(multipleStockCouponStateProvider.notifier)
+                .loadState(shopData: shopData);
+            Navigator.of(context)
+                .pushNamed('/multipleCoupon', arguments: shopData);
+          },
+          child: const Text('クーポンへ進む'),
+        );
     }
     return Container();
   }

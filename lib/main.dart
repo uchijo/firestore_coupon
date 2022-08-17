@@ -9,10 +9,13 @@ import 'package:firestore_coupon/repository/interface/auth_repository.dart';
 import 'package:firestore_coupon/repository/shop_repository.dart';
 import 'package:firestore_coupon/repository/test_repository.dart';
 import 'package:firestore_coupon/screen/home_screen.dart';
+import 'package:firestore_coupon/screen/multiple_stock_coupon_screen.dart';
 import 'package:firestore_coupon/screen/shop_info_screen.dart';
 import 'package:firestore_coupon/screen/single_stock_coupon_screen.dart';
 import 'package:firestore_coupon/view_model/home_screen/home_screen_state.dart';
 import 'package:firestore_coupon/view_model/home_screen/home_screen_state_notifier.dart';
+import 'package:firestore_coupon/view_model/multiple_stock_coupon_screen/multiple_stock_coupon_screen_state.dart';
+import 'package:firestore_coupon/view_model/multiple_stock_coupon_screen/multiple_stock_coupon_screen_state_notifier.dart';
 import 'package:firestore_coupon/view_model/single_stock_coupon_screen/single_stock_coupon_screen_state.dart';
 import 'package:firestore_coupon/view_model/single_stock_coupon_screen/single_stock_coupon_screen_state_notifier.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +47,10 @@ final homeScreenStateProvider =
 final singleStockCouponStateProvider = StateNotifierProvider<
         SingleStockCouponScreenStateNotifier, SingleStockCouponScreenState>(
     (ref) => SingleStockCouponScreenStateNotifier(ref));
+
+final multipleStockCouponStateProvider = StateNotifierProvider<
+        MultipleStockCouponScreenStateNotifier, MultipleStockCouponScreenState>(
+    (ref) => MultipleStockCouponScreenStateNotifier(ref));
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -78,7 +85,10 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         '/': (BuildContext context) => const HomeScreen(),
         '/shopInfo': (BuildContext context) => const ShopInfoScreen(),
-        '/coupon': (BuildContext context) => const SingleStockCouponScreen(),
+        '/singleCoupon': (BuildContext context) =>
+            const SingleStockCouponScreen(),
+        '/multipleCoupon': (BuildContext context) =>
+            const MultipleStockCouponScreen(),
       },
     );
   }
