@@ -2,7 +2,6 @@ import 'package:firestore_coupon/main.dart';
 import 'package:firestore_coupon/model/coupon/coupon_data.dart';
 import 'package:firestore_coupon/model/shop/shop_data.dart';
 import 'package:firestore_coupon/view_model/single_stock_coupon_screen/single_stock_coupon_screen_state.dart';
-import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SingleStockCouponScreenStateNotifier
@@ -127,7 +126,6 @@ class SingleStockCouponScreenStateNotifier
         (await ref
             .read(couponRepositoryProvider)
             .canDrawToday(shopData: state.shopData!, userId: userId));
-    debugPrint('reached here');
     return canDraw;
   }
 }

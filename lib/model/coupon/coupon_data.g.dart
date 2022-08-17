@@ -9,7 +9,7 @@ part of 'coupon_data.dart';
 _$_CouponData _$$_CouponDataFromJson(Map<String, dynamic> json) =>
     _$_CouponData(
       isUsed: json['isUsed'] as bool,
-      createdAt: fromTimestampJson(json['createdAt'] as Map<String, dynamic>),
+      createdAt: fromTimestampJson(json['createdAt'] as Timestamp),
       userId: json['userId'] as String,
       couponName: json['couponName'] as String,
       documentId: json['documentId'] as String? ?? null,

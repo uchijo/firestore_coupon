@@ -71,11 +71,16 @@ class CouponRepository {
     required ShopData shopData,
     required String userId,
   }) async {
+    final today = _timestampToday();
     final collectionRef = await FirebaseFirestore.instance
         .collection('coupons/${shopData.refName}/coupons')
         .where('userId', isEqualTo: userId)
         .orderBy('createdAt')
-        .startAt([_timestampToday()]).get();
+        .startAt([today]).get();
+    debugPrint('today: ${_timestampToday()}');
+    for (final data in collectionRef.docs) {
+      debugPrint(CouponData.fromJson(data.data()).toString());
+    }
     return collectionRef.docs.isEmpty;
   }
 

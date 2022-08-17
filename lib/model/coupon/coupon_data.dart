@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firestore_coupon/model/shop/shop_data.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -11,13 +11,14 @@ part 'coupon_data.g.dart';
 // run this to generate code
 // flutter pub run build_runner build
 
-Map<String, dynamic> toTimestampJson(Timestamp timestamp) {
-  return {'date': timestamp.toDate().toIso8601String()};
+const rawTimestamp = JsonKey();
+
+Timestamp toTimestampJson(Timestamp timestamp) {
+  return timestamp;
 }
 
-Timestamp fromTimestampJson(Map<String, dynamic> json) {
-  final date = DateTime.parse(json['date'] as String);
-  return Timestamp.fromDate(date);
+Timestamp fromTimestampJson(Timestamp json) {
+  return json;
 }
 
 @freezed
