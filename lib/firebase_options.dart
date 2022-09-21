@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyD-mdoWhcPlVQcB87LIBvcMR2WCFgtJwQk',
-    appId: '1:858923152842:android:6d6e0800702f2d06accb33',
+    appId: '1:858923152842:android:b36dd728e164ae3daccb33',
     messagingSenderId: '858923152842',
     projectId: 'coupon-test-7df6d',
     storageBucket: 'coupon-test-7df6d.appspot.com',
@@ -59,11 +59,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAMCtfg-i9Vf3eWJfKjUwOwffVLEksk7i0',
-    appId: '1:858923152842:ios:01ddbab08aadb0feaccb33',
+    appId: '1:858923152842:ios:13329fdaefce9f56accb33',
     messagingSenderId: '858923152842',
     projectId: 'coupon-test-7df6d',
     storageBucket: 'coupon-test-7df6d.appspot.com',
-    iosClientId: '858923152842-bpf380tmj0e3ce0c7fr2oskmugo66j30.apps.googleusercontent.com',
-    iosBundleId: 'com.example.firestoreCoupon',
+    iosClientId: '858923152842-gn7jg1h3sj636vgciav0tptlbta58bd5.apps.googleusercontent.com',
+    iosBundleId: 'com.example.firestoreCoupon2',
   );
 }
